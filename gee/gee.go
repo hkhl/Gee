@@ -16,17 +16,17 @@ func New() *Engine {
 	return &Engine{router: newRouter()}
 }
 
-func (engine *Engine) addRouter(method string, pattern string, handler  HandleFunc) {
+func (engine *Engine) addRoute(method string, pattern string, handler  HandleFunc) {
 	log.Printf("Route %4s - %s", method, pattern)
-	engine.router.addRouter(method, pattern, handler)
+	engine.router.addRoute(method, pattern, handler)
 }
 
 func (engine *Engine) GET(pattern string, handler  HandleFunc) {
-	engine.addRouter("GET", pattern, handler)
+	engine.addRoute("GET", pattern, handler)
 }
 
 func (engine *Engine) POST(pattern string, handler  HandleFunc) {
-	engine.addRouter("POST", pattern, handler)
+	engine.addRoute("POST", pattern, handler)
 }
 
 func (engine *Engine) Run(addr string) (err error) {
