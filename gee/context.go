@@ -19,6 +19,9 @@ type Context struct {
 	Params 	 map[string]string
 	//response info
 	StatusCode int
+	//middleware
+	handlers []HandleFunc
+	index	 int
 }
 
 func newContext(writer http.ResponseWriter, request *http.Request) *Context {
@@ -27,7 +30,20 @@ func newContext(writer http.ResponseWriter, request *http.Request) *Context {
 		Request: request,
 		Path: request.URL.Path,
 		Method: request.Method,
+		index: -1,
 	}
+}
+
+func (c *Context) Next() {
+	c.index++
+	for ; c.index < len(c.handlers); c.index++ {
+		c.handlers[c.index](c)
+	}
+}
+
+func (c *Context) Fail(code int, err string) {
+	c.index = len(c.handlers)
+	c.JSON(code, H{"message": err})
 }
 
 func (c *Context) Param(key string) string {
