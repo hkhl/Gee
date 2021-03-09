@@ -33,6 +33,12 @@ func New() *Engine {
 	return engine
 }
 
+func Default() *Engine {
+	engine := New()
+	engine.Use(Logger(), Recovery())
+	return engine
+}
+
 //r := gee.New()
 //v1 := r.Group("/v1")
 func (group *RouterGroup)Group(prefix string) *RouterGroup{
